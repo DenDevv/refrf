@@ -1,0 +1,12 @@
+{
+  "name": "particles-subscribe-frontend",
+  "version": "1.0.0",
+  "description": "Frontend для email-підписки з particles.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

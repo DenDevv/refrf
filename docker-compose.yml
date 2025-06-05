@@ -1,0 +1,60 @@
+services:
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    restart: always
+    ports:
+      - "80:80"     # HTTP
+      - "81:81"     # веб-інтерфейс NPM (Admin UI)
+      - "443:443"   # HTTPS
+    volumes:
+      - npm_data:/data
+      - npm_letsencrypt:/etc/letsencrypt
+    networks:
+      - mailgather_network
+
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: mailgather_user
+      POSTGRES_PASSWORD: DMINDEui28u834fu9UMIEI93fj934if
+      POSTGRES_DB: mailgather_db
+    # volumes:
+    #   - db_data:/var/lib/postgresql/data
+    networks:
+      - mailgather_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://mailgather_user:DMINDEui28u834fu9UMIEI93fj934if@db:5432/mailgather_db
+    depends_on:
+      - db
+    networks:
+      - mailgather_network
+    expose:
+      - "8000"     # expose-дамо порт в мережі, але не публікуємо на хості
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - mailgather_network
+    expose:
+      - "3000"     # expose-дамо порт у мережі, але не публікуємо на хості
+
+volumes:
+  # db_data:
+  npm_data:
+  npm_letsencrypt:
+
+networks:
+  mailgather_network:
+    driver: bridge
