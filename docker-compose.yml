@@ -19,8 +19,8 @@ services:
       POSTGRES_USER: mailgather_user
       POSTGRES_PASSWORD: DMINDEui28u834fu9UMIEI93fj934if
       POSTGRES_DB: mailgather_db
-    # volumes:
-    #   - db_data:/var/lib/postgresql/data
+    volumes:
+      - db_data:/var/lib/postgresql/data
     networks:
       - mailgather_network
 
@@ -51,7 +51,7 @@ services:
       - "3000"     # expose-дамо порт у мережі, але не публікуємо на хості
 
 volumes:
-  # db_data:
+  db_data:
   npm_data:
   npm_letsencrypt:
 
